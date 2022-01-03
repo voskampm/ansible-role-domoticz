@@ -1,16 +1,17 @@
 ---
+# The user which the Domoticz daemon runs as
+domoticz_user: domoticz
+# The group which the Domoticz daemon runs as
+domoticz_group: "{{ domoticz_user }}"
+
 # The directory where the downloaded files will be placed
-domoticz_download_dir: /home/domoticz
+domoticz_download_dir: "/home/{{ domoticz_user }}"
 
 # The Domoticz download url
 domoticz_url: https://gandalf.domoticz.com/releases/release/domoticz_linux_x86_64.tgz
 # The name of the untarred Domoticz directory
 domoticz_src: domoticz
 
-# The user which the Domoticz daemon runs as
-domoticz_user: domoticz
-# The group which the Domoticz daemon runs as
-domoticz_group: domoticz
 # The port for Domoticz to run http (-www daemon option). For ports <1024 root privileges are required, better to setup a reverse proxy with for example Nginx
 domoticz_port: 8080
 # Enable/Disable https for Domoticz
