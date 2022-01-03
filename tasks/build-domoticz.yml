@@ -34,14 +34,15 @@
         dest: "{{ domoticz_init }}"
         owner: root
         group: root
-        mode: 0775
+        mode: 0644
 
     - name: Autostart Domoticz and restart service
       systemd:
         name: domoticz
         enabled: true
         daemon_reload: true
-      notify: restart domoticz
+        state: started
+#      notify: restart domoticz
 
   when: (ansible_distribution == 'CentOS' and ansible_distribution_major_version == "7") or
         (ansible_distribution == 'Ubuntu' and ansible_distribution_version|int >= 15.04) or
@@ -64,7 +65,7 @@
         dest: "{{ domoticz_init }}"
         owner: root
         group: root
-        mode: 0775
+        mode: 0744
       notify: restart plexpy
 
     - name: Autostart Domoticz and restart service
@@ -82,7 +83,7 @@
         dest: "{{ domoticz_init }}"
         owner: root
         group: root
-        mode: 0775
+        mode: 0744
 
     - name: Autostart Domoticz and restart service
       service:
