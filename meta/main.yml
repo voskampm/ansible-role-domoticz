@@ -1,23 +1,20 @@
 ---
 galaxy_info:
   author: wilmardo
+  role_name: application_backup
+  namespace: voskampm
   description: |
     Role to install Domoticz Home Automation!
 
   license: BSD-3-Clause-Clear
 
-  min_ansible_version: 2.2
+  min_ansible_version: 2.9
 
   platforms:
-    - name: Ubuntu
-      versions:
-        - xenial
-#        - trusty
-
     - name: Debian
       versions:
-        - stretch
-        - jessie
+        - buster
+        - bullseye
 
   galaxy_tags:
     - domoticz

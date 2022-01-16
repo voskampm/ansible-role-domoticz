@@ -18,7 +18,7 @@ USERNAME={{ domoticz_user }}
 PIDFILE=/var/run/$NAME.pid
 SCRIPTNAME=/etc/init.d/$NAME
 
-DAEMON={{ domoticz_download_dir }}/{{ domoticz_src }}/$NAME
+DAEMON={{ domoticz_dir }}/$NAME
 DAEMON_ARGS="-daemon"
 #DAEMON_ARGS="$DAEMON_ARGS -daemonname $NAME -pidfile $PIDFILE"
 DAEMON_ARGS="$DAEMON_ARGS -www {{ domoticz_port }}"

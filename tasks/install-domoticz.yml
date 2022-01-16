@@ -1,0 +1,74 @@
+---
+
+- name: Run tasks as the root user
+  block:
+    - name: Create /etc/domoticz dir
+      file:
+        path: /etc/domoticz
+        state: directory
+        owner: root
+        group: root
+
+    # setupVars.conf contains the variables used by the 'install.sh --unattended' command below.
+    - name: Create /etc/domoticz/setupVars.conf
+      ansible.builtin.template:
+        src: setupVars.conf.j2
+        dest: "/etc/domoticz/setupVars.conf"
+        owner: "{{ domoticz_user }}"
+        group: "{{ domoticz_group }}" 
+        mode: '0744'
+
+    - name: Check id Domoticz is installed
+      ansible.builtin.stat:
+        path: "{{ domoticz_dir }}/domoticz"
+      register: installed  
+
+    - name: Download and install Domoticz
+      block: 
+        - name: GET Domoticz
+          get_url:
+            url: "{{ domoticz_install_script }}"
+            dest: "{{ domoticz_backup_app_software_dir }}/install.sh"
+
+        - name: Ensure install.sh is executable
+          file:
+            path: "{{ domoticz_backup_app_software_dir }}/install.sh"
+            state: file
+            owner: "{{ domoticz_user }}"
+            group: "{{ domoticz_group }}"
+            mode: "u=rwx,g=rx,o=rx"
+
+        - name: Install Domoticz
+          ansible.builtin.shell: "{{ domoticz_backup_app_software_dir }}/install.sh --unattended"
+          args:
+            chdir: "{{ domoticz_backup_app_software_dir }}"
+          become: yes
+          register: result
+
+        - name: Install Domoticz output
+          debug:
+            var: result
+      when: not installed.stat.exists
+
+    - name: "Ensure the domoticz service file exists."
+      ansible.builtin.template: 
+        src: "domoticz.service.j2"
+        dest: "/usr/lib/systemd/system/domoticz.service"
+        owner: "{{ domoticz_user }}"
+        group: "{{ domoticz_group }}"
+        mode: 0644
+      register: result_domoticz_upload_service_file
+
+    - name: Force systemd to reread configs
+      ansible.builtin.systemd:
+        daemon_reload: yes
+      when: result_domoticz_upload_service_file.changed
+
+    - name: "Ensure the domoticz service is in the desired state."
+      ansible.builtin.systemd:
+        state: started
+        enabled: yes
+        masked: no
+        name: domoticz.service
+
+  become: yes

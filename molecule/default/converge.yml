@@ -1,0 +1,7 @@
+---
+- name: Converge
+  hosts: all
+  tasks:
+    - name: "Include voskampm.domoticz"
+      include_role:
+        name: "voskampm.domoticz"

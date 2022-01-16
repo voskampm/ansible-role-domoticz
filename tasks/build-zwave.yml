@@ -1,15 +1,19 @@
 ---
-- name: Clone Open-ZWave repo
-  git:
-    repo: "{{ zwave_url }}"
-    dest: "{{ domoticz_download_dir }}/open-zwave"
-    version: "{{ zwave_version }}"
-  notify: make zwave
 
-- name: Create symlink open-zwave-read-only
-  file:
-    src: "{{ domoticz_download_dir }}/open-zwave"
-    dest: "{{ domoticz_download_dir }}/open-zwave-read-only"
-    owner: "{{ domoticz_user }}"
-    group: "{{ domoticz_group }}"
-    state: link
+- name: Run tasks as the root user
+  block:
+    - name: Clone Open-ZWave repo
+      git:
+        repo: "{{ zwave_url }}"
+        dest: "{{ domoticz_dir }}/open-zwave"
+        version: "{{ zwave_version }}"
+      notify: make zwave
+
+    - name: Create symlink open-zwave-read-only
+      file:
+        src: "{{ domoticz_dir }}/open-zwave"
+        dest: "{{ domoticz_dir }}/open-zwave-read-only"
+        owner: "{{ domoticz_user }}"
+        group: "{{ domoticz_group }}"
+        state: link
+  become: yes

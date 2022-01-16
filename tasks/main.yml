@@ -1,8 +1,13 @@
 ---
+
+- include_tasks: backup.yml
+  when: domoticz_create_backup_jobs
+
 - name: Ensure download directory is present
   file:
-    path: "{{ domoticz_download_dir }}"
+    path: "{{ domoticz_backup_app_software_dir }}"
     state: directory
+  when: not domoticz_create_backup_jobs  
 
 - include_tasks: load-variables.yml
 
@@ -13,4 +18,42 @@
 - include_tasks: build-zwave.yml
   when: domoticz_zwave_support
 
-- include_tasks: build-domoticz.yml
+- name: Check if the Domoticz database file exists
+  ansible.builtin.stat:
+    path: "/home/{{ domoticz_user }}/domoticz/domoticz.db"
+  register: stat_domoticz_database_file
+
+- name: Run tasks as the root user
+  block:
+
+    - name: Restore domoticz database if a backup exists
+      block:
+        
+        - name: "Check if a backup of the domoticz database file exists"
+          ansible.builtin.stat:
+            path: "{{ domoticz_database_file_backup }}"
+          register: stat_backup_of_domoticz_database_file
+
+        - name: "Debug stat_backup_of_domoticz_database_file"
+          debug:
+              var: stat_backup_of_domoticz_database_file
+
+        - name: "Ensure /home/{{ domoticz_user }}/domoticz directory exists"
+          file: 
+            path: "/home/{{ domoticz_user }}/domoticz"
+            state: directory
+
+        - name: "Restore domoticz database from: {{domoticz_database_file_backup }}"
+          ansible.builtin.copy: 
+            src: "{{ domoticz_database_file_backup }}"
+            dest: "{{ domoticz_database_file }}"
+            remote_src: yes
+            owner: "{{ domoticz_user }}"
+            group: "{{ domoticz_group }}"
+            mode: 0644
+          when: stat_backup_of_domoticz_database_file.stat.exists  
+
+      when: not stat_domoticz_database_file.stat.exists
+  become: yes
+
+- include_tasks: install-domoticz.yml

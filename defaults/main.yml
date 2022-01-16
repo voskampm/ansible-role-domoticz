@@ -1,16 +1,17 @@
 ---
+
+domoticz_create_backup_jobs: true
+domoticz_backup_app_software_dir: /backup/domoticz/software
+
+domoticz_dir: "/home/{{ domoticz_user }}/domoticz"
+domoticz_database_file: "{{ domoticz_dir }}/domoticz.db"
+domoticz_database_file_backup: /backup/domoticz/data/daily/latest/domoticz.db
+domoticz_install_script: https://raw.githubusercontent.com/domoticz/domoticz/master/scripts/install.sh
+
 # The user which the Domoticz daemon runs as
 domoticz_user: domoticz
 # The group which the Domoticz daemon runs as
 domoticz_group: "{{ domoticz_user }}"
-
-# The directory where the downloaded files will be placed
-domoticz_download_dir: "/home/{{ domoticz_user }}"
-
-# The Domoticz download url
-domoticz_url: https://gandalf.domoticz.com/releases/release/domoticz_linux_x86_64.tgz
-# The name of the untarred Domoticz directory
-domoticz_src: domoticz
 
 # The port for Domoticz to run http (-www daemon option). For ports <1024 root privileges are required, better to setup a reverse proxy with for example Nginx
 domoticz_port: 8080
@@ -19,7 +20,7 @@ domoticz_https: true
 # The port for Domoticz to run https (-sslwww daemon option). For ports <1024 root privileges are required, better to setup a reverse proxy with for example Nginx
 domoticz_https_port: 8081
 # Path to SSL certificate, if left default the server_cert.pem from Domoticz will be used (-sslcert daemon option)
-domoticz_ssl_cert: "{{ domoticz_download_dir }}/{{ domoticz_src }}/server_cert.pem"
+domoticz_ssl_cert: "{{ domoticz_dir }}/server_cert.pem"
 
 # Add support for ZWave
 domoticz_zwave_support: true
