@@ -48,7 +48,23 @@
         - name: Install Domoticz output
           debug:
             var: result
+
       when: not installed.stat.exists
+
+    # Normally the domoticz user runs 'sudo install.sh'. Now the Ansible user does that and
+    # that can cause some problems. We are going to fix those problems now.
+    - name: Ensure the domoticz directory is owned by the domoticz user
+      file:
+        path: "{{ domoticz_dir }}"
+        state: directory
+        owner: "{{ domoticz_user }}"
+        group: "{{ domoticz_group }}"
+
+    - name: Ensure the domoticz database is owned by the domoticz user
+      file:
+        path: "{{ domoticz_dir }}/domoticz.db"
+        owner: "{{ domoticz_user }}"
+        group: "{{ domoticz_group }}"
 
     - name: "Ensure the domoticz service file exists."
       ansible.builtin.template: 
