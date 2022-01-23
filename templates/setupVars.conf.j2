@@ -1,5 +1,13 @@
 Dest_folder={{ domoticz_dir }}
-Enable_http=true
-HTTP_port={{ domoticz_port }}
+{% if domoticz_https %}
 Enable_https=true
+{% else %}
+Enable_https=false
+{% endif %}
 HTTPS_port={{ domoticz_https_port }}
+{% if domoticz_http %}
+Enable_http=true
+{% else %}
+Enable_http=false
+{% endif %}
+HTTP_port={{ domoticz_http_port }}
