@@ -51,7 +51,7 @@
 
       when: not installed.stat.exists
 
-    # Normally the domoticz user runs 'sudo install.sh'. Now the Ansible user does that and
+    # Normally the domoticz user runs 'sudo install.sh'. We use the Ansible user to do that and
     # that can cause some problems. We are going to fix those problems now.
     - name: Ensure the domoticz directory is owned by the domoticz user
       file:
