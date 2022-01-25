@@ -10,9 +10,9 @@
     User={{ domoticz_user }}
     Group={{ domoticz_group }}
     {% if domoticz_https %}
-    ExecStart={{ domoticz_dir }}/domoticz -www {{ domoticz_port }} -sslwww {{ domoticz_https_port }} -sslcert {{ domoticz_ssl_cert }}
+    ExecStart={{ domoticz_dir }}/domoticz -www {{ domoticz_http_port }} -sslwww {{ domoticz_https_port }} -sslcert {{ domoticz_ssl_cert }}
     {% else %}
-    ExecStart={{ domoticz_dir }}/domoticz -www {{ domoticz_port }} -sslwww 0
+    ExecStart={{ domoticz_dir }}/domoticz -www {{ domoticz_http_port }} -sslwww 0
     {% endif %}
     WorkingDirectory={{ domoticz_dir }}/
     {% if ansible_distribution == 'Ubuntu' and ansible_distribution_version|int >= 16.04 %}

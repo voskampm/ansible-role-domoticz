@@ -44,7 +44,7 @@ domoticz_user: domoticz
 # The group which the Domoticz daemon runs as
 domoticz_group: domoticz
 # The port for Domoticz to run http (-www daemon option). For ports <1024 root privileges are required, better to setup a reverse proxy with for example Nginx
-domoticz_port: 8080
+domoticz_http_port: 8080
 # Enable/Disable https for Domoticz
 domoticz_https: true
 # The port for Domoticz to run https (-sslwww daemon option). For ports <1024 root privileges are required, better to setup a reverse proxy with for example Nginx
