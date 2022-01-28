@@ -1,0 +1,58 @@
+#!/bin/bash
+
+set -u # Don't use undefined variables
+# set -e # Exit on error
+ 
+# The P1 Smart Meter in Domoticz knows the total gas consumpution but does not record it for later usage. If you want to record it
+# you can create a dummy device in Domoticz and then create a virtual 'sensor'. This scripts uploads data to that virtual 'sensor'.
+
+IDX_SMARTMETER_GAS={{ domoticz_idx_smartmeter_gas|default(9) }}
+IDX_METER_GAS={{ domoticz_idx_meter_gas|default(10) }}
+METER_TYPE=Gas
+DOMOTICZ_SERVER={{ domoticz_server|default(192.168.178.3) }}
+DOMOTICZ_SERVER_HTTP_PORT={{ domoticz_https_port or domoticz_http_port|default(443) }}
+DOMOTICZ_SERVER_MQTT_PORT={{ domoticz_mqtt_port|default(1883) }}
+
+# Fetch GAS data from P1 meter  (use jq to parse JSON object correctly)
+SMARTMETER_DATA=`curl -k -s "https://${DOMOTICZ_SERVER}:${DOMOTICZ_SERVER_HTTP_PORT}/json.htm?type=devices&rid=${IDX_SMARTMETER_GAS}"`
+
+# echo ${SMARTMETER_DATA}
+SMARTMETER_SUBTYPE=`echo ${SMARTMETER_DATA} | jq '.result[0].SubType'| tr -d '"'`
+
+# echo -n "SMARTMETER_SUBTYPE = ${SMARTMETER_SUBTYPE}"
+
+# Check if we have retrieved data from a gas meter
+if [ "${SMARTMETER_SUBTYPE}" != "Gas" ] 
+then
+  echo -n "Error: SMARTMETER_SUBTYPE is not [Gas]. Instead it looks like: [${SMARTMETER_SUBTYPE}]"
+  exit 1
+fi
+
+SMARTMETER_GAS=`echo ${SMARTMETER_DATA} | jq '.result[0].Counter'| tr -d '"'`
+# echo -n ${SMARTMETER_GAS} 
+
+# Werkt niet.
+#if echo "$SMARTMETER_GAS" | grep -qE ^\-?[0-9]?\.?[0-9]+$; then
+#  echo -n "it IS numeric"
+#else
+#  echo -n "Error: SMARTMETER_GAS is not a number. Instead it looks like: [${SMARTMETER_GAS}]"
+#  exit 2
+#fi
+
+# Get OS date, and format it corectly.
+NOW=$(date +"%Y-%m-%d")
+ 
+# Build JSON by hand ;-)
+JSON='{ "idx" : '${IDX_METER_GAS}', "nvalue" : 0, "svalue" :"'${SMARTMETER_GAS}'" }'
+
+# echo ${JSON}
+
+mosquitto_pub -h ${DOMOTICZ_SERVER} -p ${DOMOTICZ_SERVER_MQTT_PORT} -t "domoticz/in" -m "${JSON}"
+
+# Check exit code from mosquitto_pub command
+if [ $? -eq 0 ]
+then
+   logger -t "domoticz.info" "Successfully uploaded gas meter data to Domoticz."
+else
+   logger -t "domoticz.error" "Error: Failed to upload gas meter data to Domoticz. Mosquitto exit code = $?"
+fi

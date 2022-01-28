@@ -30,3 +30,12 @@ domoticz_zwave_support: true
 zwave_version: master
 # The Open-ZWave git url
 zwave_url: https://github.com/OpenZWave/open-zwave.git
+
+# The P1 Smart Meter in Domoticz knows the total gas consumpution but does not record it for later usage. If 
+# you want to record it you can create a dummy device in Domoticz and then create a virtual 'sensor'. The
+# meter_readings.sh script uploads data to that virtual 'sensor' using Mosquitto.
+domoticz_meter_readings_install: true
+domoticz_meter_readings_dest: "{{ domoticz_dir }}/myscripts"
+domoticz_idx_smartmeter_gas: 9
+domoticz_idx_meter_gas: 10
+domoticz_server: 127.0.0.1

@@ -57,3 +57,7 @@
   become: yes
 
 - include_tasks: install-domoticz.yml
+
+- include_tasks: meter_readings.yml
+  when: domoticz_meter_readings_install is defined and domoticz_meter_readings_install
+  

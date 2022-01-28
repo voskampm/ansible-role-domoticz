@@ -20,3 +20,4 @@ domoticz_prerequisite:
   - zlib-devel
   - python34-devel
   - libudev-devel
+  - jq                   # meter_readings.sh script

@@ -1,0 +1,26 @@
+---
+
+- name: Run tasks as the root user
+  block:
+    - name: "Create {{ domoticz_meter_readings_dest }} dir"
+      file:
+        path: "{{ domoticz_meter_readings_dest }}"
+        state: directory
+        owner: "{{ domoticz_user }}"
+        group: "{{ domoticz_group }}"
+
+    - name: "Copy {{ domoticz_meter_readings_dest }}/meter_readings.sh script"
+      ansible.builtin.template:
+        src: meter_readings.sh.j2
+        dest: "{{ domoticz_meter_readings_dest }}/meter_readings.sh"
+        owner: "{{ domoticz_user }}"
+        group: "{{ domoticz_group }}" 
+        mode: '0766'
+
+    - name: Ensure meter_readings.sh cron job exists."
+      ansible.builtin.cron:
+        name: "meter_readings.sh"
+        minute:  '*/5'
+        job: "{{ domoticz_meter_readings_dest }}/meter_readings.sh > /dev/null"
+        user: "{{ domoticz_user }}"
+  become: yes
