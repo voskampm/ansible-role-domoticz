@@ -5,6 +5,6 @@
     name: "voskampm.application_backup"
   vars:
     backup_app: domoticz
-    backup_to_backup:
+    backup_what_to_backup:
       - "/home/{{ domoticz_user }}/domotizc/domoticz.db"
       - "/home/pi/{{ domoticz_user }}/logs"
