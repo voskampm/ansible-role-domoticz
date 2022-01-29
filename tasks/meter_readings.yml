@@ -2,6 +2,12 @@
 
 - name: Run tasks as the root user
   block:
+    - name: Install mosquitto server and client
+      package:
+        name: "{{ item }}"
+        state: present  
+      with_items: "{{ mosquitto_packages }}"
+
     - name: "Create {{ domoticz_meter_readings_dest }} dir"
       file:
         path: "{{ domoticz_meter_readings_dest }}"

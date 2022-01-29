@@ -21,3 +21,7 @@ domoticz_prerequisite:
   - python34-devel
   - libudev-devel
   - jq                   # meter_readings.sh script
+
+mosquitto_packages:
+  - mosquitto 
+

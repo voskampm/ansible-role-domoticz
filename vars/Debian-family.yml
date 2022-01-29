@@ -18,4 +18,8 @@ domoticz_prerequisite:
   - libudev-dev
   - jq                   # meter_readings.sh script
 
+mosquitto_packages:
+  - mosquitto
+  - mosquitto-clients
+
 domoticz_init: /lib/systemd/system/domoticz.service
