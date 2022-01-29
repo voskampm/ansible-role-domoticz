@@ -10,8 +10,10 @@ domoticz_install_script: https://raw.githubusercontent.com/domoticz/domoticz/mas
 
 # The user which the Domoticz daemon runs as
 domoticz_user: domoticz
-# The group which the Domoticz daemon runs as
+# The primary group which the Domoticz daemon runs as
 domoticz_group: "{{ domoticz_user }}"
+domoticz_additional_groups:
+  - dialout                    # Needed to access slimme meter kable
 
 # Enable/Disable http for Domoticz
 domoticz_http: true

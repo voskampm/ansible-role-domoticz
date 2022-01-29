@@ -17,6 +17,8 @@ domoticz_prerequisite:
   - python3-dev
   - libudev-dev
   - jq                   # meter_readings.sh script
+  - cu                   # Handmatig testen slimme meter kabel.  cu -l /dev/ttyUSB0 -s 115200 --parity=none -E q. Afsluiten met tilde punt (~.)
+  - minicom
 
 mosquitto_packages:
   - mosquitto

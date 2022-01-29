@@ -3,13 +3,14 @@
 - name: Run tasks as root
   become: yes
   block: 
-    - name: Create domoticz group
-      group:
-        name: "{{ domoticz_group }}"
-        state: present
+#    - name: Create domoticz group
+#      group:
+#        name: "{{ domoticz_group }}"
+#        state: present
 
     - name: Create domoticz user
       user:
         name: "{{ domoticz_user }}"
-        groups: "{{ domoticz_group }}"
+        group: "{{ domoticz_group }}"
+        groups: "{{ domoticz_additional_groups }}"
         state: present
