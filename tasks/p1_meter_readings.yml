@@ -8,25 +8,25 @@
         state: present  
       with_items: "{{ mosquitto_packages }}"
 
-    - name: "Create {{ domoticz_meter_readings_dest }} dir"
+    - name: "Create {{ domoticz_p1_meter_readings_dest }} dir"
       file:
-        path: "{{ domoticz_meter_readings_dest }}"
+        path: "{{ domoticz_p1_meter_readings_dest }}"
         state: directory
         owner: "{{ domoticz_user }}"
         group: "{{ domoticz_group }}"
 
-    - name: "Copy {{ domoticz_meter_readings_dest }}/meter_readings.sh script"
+    - name: "Copy {{ domoticz_p1_meter_readings_dest }}/p1_meter_readings.sh script"
       ansible.builtin.template:
-        src: meter_readings.sh.j2
-        dest: "{{ domoticz_meter_readings_dest }}/meter_readings.sh"
+        src: p1_meter_readings.sh.j2
+        dest: "{{ domoticz_p1_meter_readings_dest }}/p1_meter_readings.sh"
         owner: "{{ domoticz_user }}"
         group: "{{ domoticz_group }}" 
         mode: '0766'
 
-    - name: Ensure meter_readings.sh cron job exists."
+    - name: Ensure p1_meter_readings.sh cron job exists."
       ansible.builtin.cron:
-        name: "meter_readings.sh"
+        name: "p1_meter_readings.sh"
         minute:  '*/5'
-        job: "{{ domoticz_meter_readings_dest }}/meter_readings.sh > /dev/null"
+        job: "{{ domoticz_p1_meter_readings_dest }}/p1_meter_readings.sh > /dev/null"
         user: "{{ domoticz_user }}"
   become: yes

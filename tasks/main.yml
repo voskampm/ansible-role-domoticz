@@ -58,6 +58,9 @@
 
 - include_tasks: install-domoticz.yml
 
-- include_tasks: meter_readings.yml
-  when: domoticz_meter_readings_install is defined and domoticz_meter_readings_install
+- include_tasks: p1_meter_readings.yml
+  when: domoticz_p1_meter_readings_install is defined and domoticz_p1_meter_readings_install
+
+- include_tasks: solar_meter_readings.yml
+  when: domoticz_solar_meter_readings_install is defined and domoticz_solar_meter_readings_install
   

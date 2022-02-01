@@ -35,9 +35,19 @@ zwave_url: https://github.com/OpenZWave/open-zwave.git
 
 # The P1 Smart Meter in Domoticz knows the total gas consumpution but does not record it for later usage. If 
 # you want to record it you can create a dummy device in Domoticz and then create a virtual 'sensor'. The
-# meter_readings.sh script uploads data to that virtual 'sensor' using Mosquitto.
-domoticz_meter_readings_install: true
-domoticz_meter_readings_dest: "{{ domoticz_dir }}/myscripts"
+# p1_meter_readings.sh script uploads data to that virtual 'sensor' using Mosquitto.
+domoticz_p1_meter_readings_install: true
+domoticz_p1_meter_readings_dest: "{{ domoticz_dir }}/myscripts"
 domoticz_idx_smartmeter_gas: 9
 domoticz_idx_meter_gas: 10
 domoticz_server: 127.0.0.1
+domoticz_mosquitto_server: "{{ domoticz_server }}"
+domoticz_mosquitto_port: 1883
+
+# The Sbfspot Solar device in Domoticz has some data which is not stored. We created a script that reads that data 
+# ans then stores it in custom devices. 
+domoticz_solar_meter_readings_install: true
+domoticz_solar_meter_readings_dest: "{{ domoticz_dir }}/myscripts"
+domoticz_idx_solar_meter: 2           # Get data from this Solar device
+domoticz_idx_solar_meter_total: 20    # Set data for these Solar devices
+domoticz_idx_solar_meter_today: 21

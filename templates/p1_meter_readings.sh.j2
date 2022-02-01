@@ -9,12 +9,13 @@ set -u # Don't use undefined variables
 IDX_SMARTMETER_GAS={{ domoticz_idx_smartmeter_gas|default(9) }}
 IDX_METER_GAS={{ domoticz_idx_meter_gas|default(10) }}
 METER_TYPE=Gas
-DOMOTICZ_SERVER={{ domoticz_server|default(192.168.178.3) }}
-DOMOTICZ_SERVER_HTTP_PORT={{ domoticz_https_port or domoticz_http_port|default(443) }}
-DOMOTICZ_SERVER_MQTT_PORT={{ domoticz_mqtt_port|default(1883) }}
+DOMOTICZ_SERVER={{ domoticz_server|default('127.0.0.1') }}
+DOMOTICZ_SERVER_HTTPS_PORT={{ domoticz_https_port|default(443) }}
+MOSQUITTO_SERVER={{ domoticz_mosquitto_server|default('127.0.0.1') }}
+MOSQUITTO_PORT={{ domoticz_mosquitto_port|default(1883) }}
 
 # Fetch GAS data from P1 meter  (use jq to parse JSON object correctly)
-SMARTMETER_DATA=`curl -k -s "https://${DOMOTICZ_SERVER}:${DOMOTICZ_SERVER_HTTP_PORT}/json.htm?type=devices&rid=${IDX_SMARTMETER_GAS}"`
+SMARTMETER_DATA=`curl -k -s "https://${DOMOTICZ_SERVER}:${DOMOTICZ_SERVER_HTTPS_PORT}/json.htm?type=devices&rid=${IDX_SMARTMETER_GAS}"`
 
 # echo ${SMARTMETER_DATA}
 SMARTMETER_SUBTYPE=`echo ${SMARTMETER_DATA} | jq '.result[0].SubType'| tr -d '"'`
@@ -47,7 +48,7 @@ JSON='{ "idx" : '${IDX_METER_GAS}', "nvalue" : 0, "svalue" :"'${SMARTMETER_GAS}'
 
 # echo ${JSON}
 
-mosquitto_pub -h ${DOMOTICZ_SERVER} -p ${DOMOTICZ_SERVER_MQTT_PORT} -t "domoticz/in" -m "${JSON}"
+mosquitto_pub -h ${MOSQUITTO_SERVER} -p ${MOSQUITTO_PORT} -t "domoticz/in" -m "${JSON}"
 
 # Check exit code from mosquitto_pub command
 if [ $? -eq 0 ]

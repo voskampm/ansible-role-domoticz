@@ -8,14 +8,14 @@ set -u # Don't use undefined variables
 
 # This script uses regex checks that have been introduced in Bash 3.x in 2015
 
-IDX_INPUT=2
-IDX_OUTPUT_TOTAL=20
-IDX_OUTPUT_TODAY=21
+IDX_INPUT={{ domoticz_idx_solar_meter|default(2) }}
+IDX_OUTPUT_TOTAL={{ domoticz_idx_solar_meter_total|default(20) }}
+IDX_OUTPUT_TODAY={{ domoticz_idx_solar_meter_today|default(21) }}
 METER_TYPE="SBFSpot (SMA)"
-DOMOTICZ_SERVER=127.0.0.1
-DOMOTICZ_SERVER_HTTPS_PORT=8081
-MOSQUITTO_SERVER=127.0.0.1
-MOSQUITTO_PORT=1883
+DOMOTICZ_SERVER={{ domoticz_server|default('127.0.0.1') }}
+DOMOTICZ_SERVER_HTTPS_PORT={{ domoticz_https_port|default(443) }}
+MOSQUITTO_SERVER={{ domoticz_mosquitto_server|default('127.0.0.1') }}
+MOSQUITTO_PORT={{ domoticz_mosquitto_port|default(1883) }}
 
 # Fetch Solar data from meter  (use jq to parse JSON object correctly)
 SBFSPOT_DATA=`curl -k -s "https://${DOMOTICZ_SERVER}:${DOMOTICZ_SERVER_HTTPS_PORT}/json.htm?type=devices&rid=${IDX_INPUT}"`

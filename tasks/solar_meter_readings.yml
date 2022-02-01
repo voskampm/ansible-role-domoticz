@@ -1,0 +1,32 @@
+---
+
+- name: Run tasks as the root user
+  block:
+    - name: Install mosquitto server and client
+      package:
+        name: "{{ item }}"
+        state: present  
+      with_items: "{{ mosquitto_packages }}"
+
+    - name: "Create {{ domoticz_solar_meter_readings_dest }} dir"
+      file:
+        path: "{{ domoticz_solar_meter_readings_dest }}"
+        state: directory
+        owner: "{{ domoticz_user }}"
+        group: "{{ domoticz_group }}"
+
+    - name: "Copy {{ domoticz_solar_meter_readings_dest }}/solar_meter_readings.sh script"
+      ansible.builtin.template:
+        src: solar_meter_readings.sh.j2
+        dest: "{{ domoticz_solar_meter_readings_dest }}/solar_meter_readings.sh"
+        owner: "{{ domoticz_user }}"
+        group: "{{ domoticz_group }}" 
+        mode: '0766'
+
+    - name: Ensure solar_meter_readings.sh cron job exists."
+      ansible.builtin.cron:
+        name: "solar_meter_readings.sh"
+        minute:  '*/15'
+        job: "{{ domoticz_solar_meter_readings_dest }}/solar_meter_readings.sh > /dev/null"
+        user: "{{ domoticz_user }}"
+  become: yes
