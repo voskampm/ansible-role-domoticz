@@ -15,6 +15,9 @@ domoticz_group: "{{ domoticz_user }}"
 domoticz_additional_groups:
   - dialout                    # Needed to access slimme meter kable
 
+domoticz_what_to_backup:
+  - "{{ domoticz_database_file }}"
+
 # Enable/Disable http for Domoticz
 domoticz_http: true
 # The port for Domoticz to run http (-www daemon option). For ports <1024 root privileges are required, better to setup a reverse proxy with for example Nginx
