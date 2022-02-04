@@ -1,5 +1,10 @@
 ---
 
+# Wether or not to upgrade Domoticz version. This will (re)install the latest Domoticz
+# version when Domoticz is already installed. This might the same version as is already
+# installed. Only use when yo're experiencing technical problems or when a new Domoticz 
+# version is available. Make sure you have a GOOD BACKUP when set to true.
+domoticz_upgrade: false
 domoticz_create_backup_jobs: true
 domoticz_backup_app_software_dir: /backup/domoticz/software
 
@@ -47,8 +52,8 @@ domoticz_server: 127.0.0.1
 domoticz_mosquitto_server: "{{ domoticz_server }}"
 domoticz_mosquitto_port: 1883
 
-# The Sbfspot Solar device in Domoticz has some data which is not stored. We created a script that reads that data 
-# ans then stores it in custom devices. 
+# The Sbfspot Solar device in Domoticz has some data which is not stored. We created a script 
+# that reads that data and then stores it in custom sensors. 
 domoticz_solar_meter_readings_install: true
 domoticz_solar_meter_readings_dest: "{{ domoticz_dir }}/myscripts"
 domoticz_idx_solar_meter: 2           # Get data from this Solar device
