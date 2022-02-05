@@ -2,7 +2,7 @@
 This role installs Domoticz Home Automation System and support for OpenZWave can be enabled if needed. By Default the role will also install scripts to backup Domoticz. If Domoticz is not yet installed and /backup/domoticz/data/daily/latest/domoticz.db exists that file will be restored to the Domoticz directory.
 
 ## Recovering Domoticz
-If your Domoticz server installed with the voskampm.domoticz role crashes you can just install a new server, restore the /backup directory and run the voskampm.domoticz role. The Domoticz database will restored as part of the installation process.
+If your Domoticz server installed with this domoticz role crashes you can just install a new server, restore the /backup directory and run this domoticz role. The Domoticz database will restored as part of the installation process.
 
 ## Updating Domoticz
 By the default the domoticz user created by this playbook does not have sudo rights. That means that upgrading Domoticz by using the upgrade button on the Domoticz website does not work. In fact the domoticz user can not even download the Domoticz install script. You can, instead, use Ansible to upgrade Domoticz. Just give the domoticz_upgrade variable the value true. For example:
@@ -84,11 +84,16 @@ domoticz_idx_solar_meter_today: 21
 * https://github.com/voskampm/ansible-role-application_backup
 
 ## Example Playbook
-Install Domoticz with the default settings
+Install Domoticz with the default settings but without Zwave support
 ```yaml
 - hosts: domoticz-servers
-  roles:
-     - { role: voskampm.domoticz }
+
+  tasks:
+  - name: Ensure domoticz is installed
+      include_role:
+        name: voskampm.domoticz
+      vars:
+        domoticz_zwave_support: false
 ```
 After running the playbook, Domoticz should be up and running and the webserver can be found at http://ipaddress:8080 and https://ipaddress:8081
 
