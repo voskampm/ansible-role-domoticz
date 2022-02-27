@@ -18,7 +18,7 @@
         group: "{{ domoticz_group }}" 
         mode: '0744'
 
-    - name: Check id Domoticz is installed
+    - name: Check if Domoticz is installed
       ansible.builtin.stat:
         path: "{{ domoticz_dir }}/domoticz"
       register: installed  
