@@ -1,7 +1,7 @@
 ---
 galaxy_info:
-  author: wilmardo
-  role_name: application_backup
+  author: Michiel Voskamp
+  role_name: domoticz
   namespace: voskampm
   description: |
     Role to install Domoticz Home Automation!
