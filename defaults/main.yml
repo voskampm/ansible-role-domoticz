@@ -32,7 +32,7 @@ domoticz_https: true
 # The port for Domoticz to run https (-sslwww daemon option). For ports <1024 root privileges are required, better to setup a reverse proxy with for example Nginx
 domoticz_https_port: 8081
 # Path to SSL certificate, if left default the server_cert.pem from Domoticz will be used (-sslcert daemon option)
-domoticz_ssl_cert: "{{ domoticz_dir }}/server_cert.pem"
+domoticz_ssl_cert_file: "{{ domoticz_dir }}/server_cert.pem"
 
 # Add support for ZWave
 domoticz_zwave_support: true
