@@ -1,3 +1,6 @@
+# ARCHIVED
+This role has been moved to the voskampm.home collection repository and is archived
+
 # voskamp.domoticz
 This role installs Domoticz Home Automation System and support for OpenZWave can be enabled if needed. By Default the role will also install scripts to backup Domoticz. If Domoticz is not yet installed and /backup/domoticz/data/daily/latest/domoticz.db exists that file will be restored to the Domoticz directory.
 
